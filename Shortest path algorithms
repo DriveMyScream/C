@@ -1,0 +1,157 @@
+#include<stdio.h>
+#include<conio.h>
+#define max 20
+/*function for accepting cost of links*/
+void accept_data(int G[][max],int n,char node[])
+{
+	int i,j;
+	char c;
+	c ='a';
+	for(i=0;i<n;i++)
+	{
+		node[i]=c;             //assigning alphabets to nodes
+		c++;
+	}
+	node[i]='\0';
+	printf("\nEnter cost of the links (999 for no link) : \n");
+	for(i=0;i<n;i++)
+	{
+		for(j=i+1;j<n;j++)
+		{
+			printf("Cost for link (%c -> %c) : ",node[i],node[j]);
+			scanf("%d",&G[i][j]);
+			G[j][i]=G[i][j];
+		}
+	}
+}
+/*function to initialise matrix*/
+void initialise(int G[][max],int n)
+{
+	int i,j;
+	for(i=0;i<n;i++)
+		for(j=0;j<n;j++)
+			G[i][j]=0;
+}
+
+/*Function to print matrix*/
+void print(int G[][max],int n,char node[])
+{
+	int i,j;
+	printf(" ");
+	for(i=0;i<n;i++)
+		printf("%5c",node[i]);
+	printf("\n");
+	for(i=0;i<n;i++)
+	{
+		printf("\n");
+		printf("%c",node[i]);
+		for(j=0;j<n;j++)
+			printf("%5d",G[i][j]);
+	}
+}
+/*Function to find smallest distance*/
+int choose(int s[],int dist[],int n)
+{
+	int i,min=999,mini;
+	for(i=0;i<n;i++)
+	{
+		if(s[i]==0)
+		{
+			if(dist[i] < min)
+			{
+				min = dist[i];
+				mini = i;
+	return(mini);
+}
+/*Function to display tabular result*/
+void display(int s[],int dist[],int from[],int n,char node[])
+{
+	int i;
+	printf("\nNode :\t\t");
+	for(i=0;i<n;i++)
+		printf("%4c",node[i]
+	printf("\nProcessed :\t");
+	for(i=0;i<n;i++)
+		printf("%4d",s[i]);
+	printf("\nVia Node :\t");
+	for(i=0;i<n;i++)
+		printf("%4d",from[i]);
+
+	printf("\nCost :\t\t");
+	for(i=0;i<n;i++)
+		printf("%4d",dist[i]);
+	printf("\n");
+}
+/*Function for calculatinf shortest path*/
+void shortest_path(int G[][max],int v,intn,char node[])
+{
+	int s[max],dist[max],u,w,i,from[max],path[max],d;
+	char sd;
+	for(i=0;i<n;i++)
+	{
+		s[i]=0;
+		dist[i]=G[v][i];
+		if(G[v][i]>0 && G[v][i]<999)
+			from[i]=v;
+		else
+			from[i]=999;
+	}
+	s[v]=1;
+	dist[v]=0;
+	printf("\n");
+	display(s,dist,from,n,node);
+	getch();
+	for(i=0;i<n-1;i++)
+	{
+		u=choose(s,dist,n);
+		s[u]=1;
+		for(w=0;w<n;w++)
+		{
+			if(s[w]==0)
+			{
+				if(dist[u] + G[u][w] <dist[w])
+				{
+					dist[w]=dist[u]+G[u][w];
+					from[w]=u;
+				}
+			}
+		}
+
+		display(s,dist,from,n,node);
+		getch();
+	}
+	printf("\n\nEnter destination : ");
+	sd=getche();
+	for(d=0;d<n && node[d]!=sd;d++);
+
+	printf("\n\nThe total cost of route : %d",dist[d]);
+	i=0;
+	path[i++]=d;
+	while(d!=v)
+	{
+		path[i++]=from[d];
+		d=from[d];
+	}
+	i--;
+	printf("\n\nShortest path is : ");
+	while(i>=0)
+		printf("-> %c ",node[path[i--]]);
+
+getch();
+}
+void main()
+{
+	int G[max][max],n,v;
+	char node[max],sv;
+	clrscr();
+	printf("\nEnter no. of vertices : ");
+	scanf("%d",&n);
+
+	initialise(G,n);
+	accept_data(G,n,node);
+	print(G,n,node);
+	printf("\n\nEnter source vertex : ");
+	sv=getche();
+	for(v=0;v<n && node[v]!=sv;v++);
+	shortest_path(G,v,n,node)
+}
